@@ -41,7 +41,7 @@ public class HWProfile2 {
     public final int LIFT_LOW_JUNCTION = -1620;
     public final int LIFT_MID_JUNCTION = -2840;
     public final int LIFT_HIGH_JUNCTION = -4000;
-    public final int LIFT_EXTRACT_CONE = 1100;
+    public final int LIFT_EXTRACT_CONE = -1100;
     public final int LIFT_CONE5 = -680;
     public final int LIFT_CONE4 = -550;
     public final int LIFT_CONE3 = -300;

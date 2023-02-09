@@ -140,6 +140,13 @@ public class BlueTerminalAuto extends LinearOpMode {
             switch(runState){
                 case TEST:
 
+
+                    drive.driveDistance(0, 24);
+                    sleep(5000);
+
+                    drive.driveDistance(180, -24);
+                    sleep(5000);
+
                     drive.pidRotate(45, 1);
                     sleep(2000);
 
@@ -179,10 +186,6 @@ public class BlueTerminalAuto extends LinearOpMode {
                     drive.pidRotate(0, 1);
                     sleep(2000);
 
-                     drive.driveDistance(0, 24);
-                     sleep(10000);
-                     drive.driveDistance(180, -24);
-                     sleep(10000);
                     runState = State.HALT;
                     break;
 

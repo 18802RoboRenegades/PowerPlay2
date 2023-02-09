@@ -1,0 +1,80 @@
+This is a text file that is used for storage of code or variables in case of need of recovery.
+
+ticks per inch:
+
+Mechanum diameter: 96mm / 37.79528 inches
+
+202
+184
+201
+190
+
+16.1875 IS THE TICKS PER INCH FOR SEASON 2022 - 2023!!
+
+406
+261
+311
+363
+strafe:
++: left
+-: right
+
+sweet spot for trapdoor:
+0.317
+
+sweet spot for auto claw:
+0.239
+
+clawOpen:
+
+clawClose:
+
+
+
+public boolean PrecisionDriveForwardReverse(double power, double inches) {
+        // ticks per revolution is 538
+        // gear ratio is 1.5 or 2:3
+        /**scout.rightFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         scout.leftFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         scout.rightRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         scout.leftRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); **/
+
+
+        double leftFrontDistance = 0;
+        double leftRearDistance = 0;
+        double rightFrontDistance = 0;
+        double rightRearDistance = 0;
+        double leftFrontEncoderStart = scout.leftFrontWheelMotor.getCurrentPosition();
+        double leftRearEncoderStart = scout.leftRearWheelMotor.getCurrentPosition();
+        double rightFrontEncoderStart = scout.rightFrontWheelMotor.getCurrentPosition();
+        double rightRearEncoderStart = scout.rightRearWheelMotor.getCurrentPosition();
+
+        boolean isClawOpen = true;
+
+        double averageEncoderReading = 0;
+        while (Math.abs(averageEncoderReading) < Math.abs(scout.TICKS_PER_INCH * inches)){
+
+            scout.leftFrontWheelMotor.setPower(power);
+            scout.leftRearWheelMotor.setPower(power);
+            scout.rightFrontWheelMotor.setPower(power);
+            scout.rightRearWheelMotor.setPower(power);
+
+            leftFrontDistance = scout.leftFrontWheelMotor.getCurrentPosition() - leftFrontEncoderStart;
+            leftRearDistance = scout.leftRearWheelMotor.getCurrentPosition() - leftRearEncoderStart;
+            rightFrontDistance = scout.rightFrontWheelMotor.getCurrentPosition() - rightFrontEncoderStart;
+            rightRearDistance = scout.rightRearWheelMotor.getCurrentPosition() - rightRearEncoderStart;
+
+            averageEncoderReading = (leftFrontDistance + leftRearDistance
+                    + rightFrontDistance + rightRearDistance) / 4;
+
+//            opMode.telemetry.addData("Robot is driving forward.", "");
+//            opMode.telemetry.update();
+        } // end of while loop
+
+        scout.leftFrontWheelMotor.setPower(0);
+        scout.leftRearWheelMotor.setPower(0);
+        scout.rightFrontWheelMotor.setPower(0);
+        scout.rightRearWheelMotor.setPower(0);
+        return true;
+}
+

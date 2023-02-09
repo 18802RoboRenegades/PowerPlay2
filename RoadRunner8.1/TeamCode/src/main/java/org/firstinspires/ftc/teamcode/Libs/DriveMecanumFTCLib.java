@@ -8,12 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfileFTClib;
+import org.firstinspires.ftc.teamcode.Hardware.HWProfile2;
 
 public class DriveMecanumFTCLib {
 
-    private HardwareProfileFTClib robot;
+    private HWProfile2 robot;
     public double RF, LF, LR, RR;
     public LinearOpMode opMode;
 
@@ -22,7 +21,7 @@ public class DriveMecanumFTCLib {
     /*
      * Constructor method
      */
-    public DriveMecanumFTCLib(HardwareProfileFTClib myRobot, LinearOpMode myOpMode){
+    public DriveMecanumFTCLib(HWProfile2 myRobot, LinearOpMode myOpMode){
         robot = myRobot;
         opMode = myOpMode;
 
@@ -146,7 +145,6 @@ public class DriveMecanumFTCLib {
         // make sure distance is positive. Use heading to change direction.
         distance = Math.abs(distance);
 
-        while(opMode.opModeIsActive() && correct) {
             while (opMode.opModeIsActive() && active) {
 
                 error = distance - distanceTraveled;
@@ -156,9 +154,9 @@ public class DriveMecanumFTCLib {
                 lastError = error;
 
 
-                if (drivePower > -0.10 && drivePower < 0 ){
+                if (drivePower > -0.15 && drivePower < 0 ){
                     drivePower = minSpeed;
-                } else if (drivePower <0.10 && drivePower > 0){
+                } else if (drivePower <0.15 && drivePower > 0){
                     drivePower = minSpeed;
                 }
                 rflrPower = drivePower * (Math.sin(theta) - Math.cos(theta));
@@ -240,7 +238,7 @@ public class DriveMecanumFTCLib {
 
              */
 
-        }
+
     }   // close driveDistance method
 
 
@@ -431,24 +429,6 @@ public class DriveMecanumFTCLib {
 
     }   //end of the PIDRotate Method
 
-
-    public void detectJunction(double forwardSpeed, double timeout){
-        ElapsedTime localtime = new ElapsedTime();
-
-
-        setDrivePower(forwardSpeed, forwardSpeed, forwardSpeed, forwardSpeed);
-        localtime.reset();
-        while(((robot.sensorJunction.getDistance(DistanceUnit.INCH) > 7) &&
-                (robot.sensorJunction2.getDistance(DistanceUnit.INCH) > 7)) && (localtime.time() < timeout)) {
-            opMode.telemetry.addData("sensor Junction", String.format("%.01f in", robot.sensorJunction.getDistance(DistanceUnit.INCH)));
-            opMode.telemetry.update();
-        }
-
-        motorsHalt();
-
-    }
-
-
     /******************************************************************************************
      * Sets power to all four drive motors
      * Method:
@@ -484,11 +464,11 @@ public class DriveMecanumFTCLib {
      */
 
     public void closeClaw(){
-        robot.servoGrabber.setPosition(robot.SERVO_GRAB_CLOSE);
+        robot.clawServo.setPosition(robot.SERVO_GRAB_CLOSE);
     }   // end of closeClaw method
 
     public void openClaw(){
-        robot.servoGrabber.setPosition(robot.SERVO_GRAB_OPEN);
+        robot.clawServo.setPosition(robot.SERVO_GRAB_OPEN);
     }   // end of openClaw method
 
     public void liftReset(){

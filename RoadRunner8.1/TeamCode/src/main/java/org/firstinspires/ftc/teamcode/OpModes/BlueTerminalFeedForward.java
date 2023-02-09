@@ -13,16 +13,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfileFTClib;
+import org.firstinspires.ftc.teamcode.Hardware.HWProfile2;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanumFTCLib;
 
 import java.util.List;
 
-@Autonomous(name = "Auto - Squid Blue Terminal Feed Forward", group = "Leviathan")
+@Autonomous(name = "AutoBlueTerminal", group = "Leviathan")
 
 public class BlueTerminalFeedForward extends LinearOpMode {
 
-    private final static HardwareProfileFTClib robot = new HardwareProfileFTClib();
+    private final static HWProfile2 robot = new HWProfile2();
     private LinearOpMode opMode = this;
     final private boolean distanceSensorFlag = false;
 
@@ -32,7 +32,7 @@ public class BlueTerminalFeedForward extends LinearOpMode {
     public static double l3_Kd = 0.01;
     public static double l4_MIN_SPEED = 0.10;
 
-    private static final String TFOD_MODEL_ASSET = "GenericSignalSleeve.tflite";
+    private static final String TFOD_MODEL_ASSET = "PP_Generic_SS.tflite";
     // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
 
     private static final String[] LABELS = {
@@ -108,7 +108,6 @@ public class BlueTerminalFeedForward extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.motorBase.setTargetPosition(0);
-//        robot.lampRobot.setPower(1);
         robot.motorBase.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Send telemetry message to signify robot waiting;
@@ -144,9 +143,6 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                             position = 2;
                         } else position = 3;
                     }
-                    telemetry.addData("sensor Junction", robot.sensorJunction.getDistance(DistanceUnit.INCH));
-                    telemetry.addData("sensor Junction2", robot.sensorJunction2.getDistance(DistanceUnit.INCH));
-                    telemetry.update();
 
                     // post telemetry to FTC Dashboard as well
 
@@ -154,23 +150,21 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                     dashTelemetry.put("p04 - PID IMU Angle Y                  = ", robot.imu.getAngles()[1]);
                     dashTelemetry.put("p05 - PID IMU Angle Z                  = ", robot.imu.getAngles()[2]);
                     dashTelemetry.put("p06 - Lift Front Encoder Value = ", robot.motorBase.getCurrentPosition());
-                    dashTelemetry.put("p07 - sensor Junction", robot.sensorJunction.getDistance(DistanceUnit.INCH));
-                    dashTelemetry.put("p08 - sensor Junction2", robot.sensorJunction2.getDistance(DistanceUnit.INCH));
                     dashboard.sendTelemetryPacket(dashTelemetry);
                 }
             }
         }  // end of while
 
         if(isStopRequested()) requestOpModeStop();   // user requested to abort setup
-        robot.lampRobot.setPower(0);
 
         runtime.reset();
-        runState = State.LEVEL_ADJUST;
+        runState = State.TEST;
 
         while (opModeIsActive()) {
             switch(runState){
                 case TEST:
 
+                    /**
                     drive.ftclibRotate(45, 1);
                     sleep(2000);
 
@@ -209,12 +203,15 @@ public class BlueTerminalFeedForward extends LinearOpMode {
 
                     drive.ftclibRotate(0, 1);
                     sleep(2000);
-
+**/
+                     drive.ftclibDrive(0, 24);
+                     sleep(10000);
+                     drive.ftclibDrive(180, -24);
+                     sleep(10000);
                     runState = State.HALT;
                     break;
 
                 case LEVEL_ADJUST:
-                    robot.lampRobot.setPower(0);
                     runState = State.HIGH_JUNCTION_1;
                     break;
 
@@ -233,16 +230,8 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                     drive.ftclibRotate(-45,robot.PID_ROTATE_ERROR);
 
                     // decide if the program should use the distance sensors to find the junction
-                    if(distanceSensorFlag) {
-                        // drive forward to detect the junction
-                        drive.detectJunction(0.2, 1.5);
 
-                        // reverse distance slightly
-                        drive.ftclibDrive(180, 2);
-                    } else {
-                        // Drive forward to the high junction
                         drive.ftclibDrive(0,7);
-                    }
 
                     // lower the arm and release the cone
                     drive.liftMidJunction();
@@ -305,16 +294,6 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                     drive.ftclibRotate(135, robot.PID_ROTATE_ERROR);
 
                     // decide if the program should use the distance sensors to find the junction
-                    if(distanceSensorFlag) {
-                        // drive forward to detect the junction
-                        drive.detectJunction(0.2, 1.5);
-
-                        // reverse distance slightly
-                        drive.ftclibDrive(180, 2);
-                    } else {
-                        // Drive forward to the high junction
-                        drive.ftclibDrive(0,8);
-                    }
 
                     // place the cone
                     drive.liftPosition(robot.LIFT_RESET);
@@ -373,16 +352,6 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                     drive.ftclibRotate(135, robot.PID_ROTATE_ERROR);
 
                     // decide if the program should use the distance sensors to find the junction
-                    if(distanceSensorFlag) {
-                        // drive forward to detect the junction
-                        drive.detectJunction(0.2, 1.5);
-
-                        // reverse distance slightly
-                        drive.ftclibDrive(180, 2);
-                    } else {
-                        // Drive forward to the high junction
-                        drive.ftclibDrive(0,8);
-                    }
 
                     // place the cone
                     drive.liftReset();
@@ -412,16 +381,6 @@ public class BlueTerminalFeedForward extends LinearOpMode {
                     drive.ftclibRotate(135, robot.PID_ROTATE_ERROR);
 
                     // decide if the program should use the distance sensors to find the junction
-                    if(distanceSensorFlag) {
-                        // drive forward to detect the junction
-                        drive.detectJunction(0.2, 1.5);
-
-                        // reverse distance slightly
-                        drive.ftclibDrive(180, 2);
-                    } else {
-                        // Drive forward to the high junction
-                        drive.ftclibDrive(0,8);
-                    }
 
                     // lower the arm and release the cone
                     drive.liftLowJunction();

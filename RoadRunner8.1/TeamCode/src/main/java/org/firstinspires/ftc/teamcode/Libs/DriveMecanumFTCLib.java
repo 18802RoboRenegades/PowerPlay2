@@ -54,7 +54,7 @@ public class DriveMecanumFTCLib {
         double derivative, lastError=0, error;
         double integral, drivePower;
         ElapsedTime rotateTime = new ElapsedTime();
-        double maxDrivePower = 0.4;
+        double maxDrivePower = 0.45;
         double Kp = 0.05;
         double Ki = 0.001;
         double Kd = 0.01;
@@ -169,11 +169,11 @@ public class DriveMecanumFTCLib {
         double integral = 0;
         ElapsedTime rotateTime = new ElapsedTime();
         double error;
-        double Kp = 0.01;
+        double Kp = 0.005;
         double Ki = 0.0; //0.001;
         double Kd = 0.0001; //0.02;
-        double minRotateSpeed = 0.08;
-        double maxRotateSpeed = 0.8;
+        double minRotateSpeed = 0.15;
+        double maxRotateSpeed = 0.5;
         double rotationSpeed;
         double derivative, lastError=0;
         double rightRotate;
@@ -196,9 +196,9 @@ public class DriveMecanumFTCLib {
             // Clip motor speed
             rotationSpeed = clamp(rotationSpeed, -maxRotateSpeed, maxRotateSpeed);
 
-            if ((rotationSpeed > -0.10) && (rotationSpeed < 0)) {
+            if ((rotationSpeed > -0.15) && (rotationSpeed < 0)) {
                 rotationSpeed = -minRotateSpeed;
-            } else if ((rotationSpeed < 0.10) && (rotationSpeed > 0)) {
+            } else if ((rotationSpeed < 0.15) && (rotationSpeed > 0)) {
                 rotationSpeed = minRotateSpeed;
             }
 

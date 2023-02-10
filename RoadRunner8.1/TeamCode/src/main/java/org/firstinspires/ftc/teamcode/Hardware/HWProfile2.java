@@ -37,18 +37,18 @@ public class HWProfile2 {
 
     public final int LIFT_RESET = 0;
     public final int LIFT_MIN_LOW = 0;
-    public final int LIFT_MAX_HIGH = -4200;
-    public final int LIFT_LOW_JUNCTION = -1620;
-    public final int LIFT_MID_JUNCTION = -2840;
-    public final int LIFT_HIGH_JUNCTION = -4000;
+    public final int LIFT_MAX_HIGH = -4600;
+    public final int LIFT_LOW_JUNCTION = -1928;
+    public final int LIFT_MID_JUNCTION = -3320;
+    public final int LIFT_HIGH_JUNCTION = -4550;
     public final int LIFT_EXTRACT_CONE = -1100;
     public final int LIFT_CONE5 = -680;
     public final int LIFT_CONE4 = -550;
     public final int LIFT_CONE3 = -300;
     public final int LIFT_CONE2 = -200;
     public final double LIFT_POWER = 1;
-    public final double SERVO_GRAB_OPEN = 0.33;
-    public final double SERVO_GRAB_CLOSE = 0.55;
+    public final double SERVO_GRAB_OPEN = 0.38;
+    public final double SERVO_GRAB_CLOSE = 0.61;
 
     public final double PID_Kp = 0.08;
     public final double PID_Ki = 0.01;

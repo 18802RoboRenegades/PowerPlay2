@@ -51,7 +51,7 @@ public class BlueTerminalAuto extends LinearOpMode {
 
 //    @Override
     public void runOpMode() {
-        State runState = State.TEST;
+        State runState = State.HIGH_JUNCTION_1;
 
         telemetry.addData("Robot State = ", "NOT READY");
         telemetry.update();
@@ -123,7 +123,7 @@ public class BlueTerminalAuto extends LinearOpMode {
                             position = 2;
                         } else position = 3;
                     }
-
+                telemetry.update();
                     // post telemetry to FTC Dashboard as well
                     dashTelemetry.put("p03 - PID IMU Angle X                  = ", robot.imu.getAngles()[0]);
                     dashTelemetry.put("p04 - PID IMU Angle Y                  = ", robot.imu.getAngles()[1]);
@@ -141,11 +141,12 @@ public class BlueTerminalAuto extends LinearOpMode {
                 case TEST:
 
 
-                    drive.driveDistance(0, 24);
+                    /**drive.driveDistance(0, 24);
                     sleep(5000);
 
                     drive.driveDistance(180, -24);
                     sleep(5000);
+                    **/
 
                     drive.pidRotate(45, 1);
                     sleep(2000);
@@ -196,19 +197,23 @@ public class BlueTerminalAuto extends LinearOpMode {
                 case HIGH_JUNCTION_1:
                     // starting from start position, close claw
                     drive.closeClaw();
-                    sleep(150);
+                    sleep(500);
 
                     // raise the arm to position the cone
-                    drive.liftHighJunction();
 
                     // Drive forward away from wall, pushing signal cone out of position
-                    drive.driveDistance(0, 50);
-
-                    //turn to high junction
-                    drive.pidRotate(-45,robot.PID_ROTATE_ERROR);
-
+                    drive.driveDistance(0, 3);
+                    drive.driveDistance(-90, 24);
+                    sleep(500);
+                    drive.pidRotate(0, 1);
                     // drive forward to place the cone
-                    drive.driveDistance(0,7);
+                    drive.driveDistance(0,50);
+                    drive.pidRotate(0, 1);
+                    sleep(500);
+                    drive.liftHighJunction();
+                    sleep(2000);
+                    drive.driveDistance(90, 20);
+                    drive.pidRotate(0, 1);
 
                     // lower the arm and release the cone
                     drive.liftMidJunction();
@@ -217,17 +222,10 @@ public class BlueTerminalAuto extends LinearOpMode {
 
                     // raise the lift to keep from entangling on junction
                     drive.liftHighJunction();
-
+                    sleep(500);
                     // back away from the junction
-                    drive.driveDistance(180, 7);
 
-                    // reset the lift to its starting position
-                    drive.liftPosition(robot.LIFT_CONE5);
-
-                    //rotate towards the cone stack
-                    drive.pidRotate(0, robot.PID_ROTATE_ERROR);
-
-                    runState = State.CONE_2;
+                    runState = State.PARK;
                     break;
 
                 case CONE_2:        // top cone of the starter stack
@@ -391,7 +389,7 @@ public class BlueTerminalAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(180,25);
+                        drive.driveDistance(90,35);
 
                     } else if (position == 2) {
                         // reset the lift
@@ -402,7 +400,7 @@ public class BlueTerminalAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(0,0);
+                        drive.driveDistance(90,10);
 
                     } else {
                         // reset the lift
@@ -413,11 +411,8 @@ public class BlueTerminalAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(0,12);
+                        drive.driveDistance(-90,10);
 
-                        drive.pidRotate(95, 1);
-
-                        drive.driveDistance(0, 12);
                     }
 
                     while(opModeIsActive() && robot.motorBase.getCurrentPosition() > 10){

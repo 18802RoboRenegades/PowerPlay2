@@ -102,8 +102,8 @@ public class DriveMecanumFTCLib {
                 if (initZ < currentZ) {
                     RF = rflrPower + (zCorrection * 1.4);
                     RR = lfrrPower + (zCorrection * 1.4);
-                    LF = lfrrPower - zCorrection;
-                    LR = rflrPower - zCorrection;
+                    LF = lfrrPower - (zCorrection * 1.2);
+                    LR = rflrPower - (zCorrection * 1.2);
                 }
                 if (initZ > currentZ) {
                     RF = rflrPower - zCorrection;

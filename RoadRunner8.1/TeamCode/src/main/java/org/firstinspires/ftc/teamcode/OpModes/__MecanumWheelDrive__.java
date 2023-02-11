@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.PowerPlayCode;
+package org.firstinspires.ftc.teamcode.OpModes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,6 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.Hardware.HWProfile2;
+import org.firstinspires.ftc.teamcode.Libs.DriveMecanumFTCLib;
+import org.firstinspires.ftc.teamcode.PowerPlayCode.DriveClassEnergize;
+import org.firstinspires.ftc.teamcode.PowerPlayCode.Hardware3;
 
 @TeleOp(name="__MecanumWheelDrive__", group="LinearOpMode")
 
@@ -27,6 +32,7 @@ public class __MecanumWheelDrive__ extends LinearOpMode
     private Servo servoTest;
     // The line of code below is defining the robot.
     private Hardware3 scout = new Hardware3();
+    private HWProfile2 robot = new HWProfile2();
     private double DriveSpeed = 1;
     private double TurnSpeed = 1;
     private double StrafeSpeed = 1;
@@ -49,11 +55,12 @@ public class __MecanumWheelDrive__ extends LinearOpMode
         }
         scout.init(hardwareMap);
         DriveClassEnergize drive = new DriveClassEnergize(scout, myOpMode);
+        DriveMecanumFTCLib drivem = new DriveMecanumFTCLib(robot, myOpMode);
         telemetry.addData("Status:", "Initialized");
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+        drive.haltandresetencoders();
         //runtime.reset();
 
         // run until the end of the match (driver presses STOP)
@@ -72,22 +79,22 @@ public class __MecanumWheelDrive__ extends LinearOpMode
 
 
             if(this.gamepad2.y) {
-                drive.liftPosition(scout.TOP_JUNCTION_TICK_VALUE);
+                drive.liftPosition(robot.LIFT_HIGH_JUNCTION);
             } else if(this.gamepad2.a) {
-                drive.liftPosition(scout.FLOOR_TICK_VALUE);
+                drive.liftPosition(robot.LIFT_RESET);
             } else if(this.gamepad2.b){
-                drive.liftPosition(scout.BOTTOM_JUNCTION_TICK_VALUE);
+                drive.liftPosition(robot.LIFT_LOW_JUNCTION);
             } else if(this.gamepad2.x) {
-                drive.liftPosition(scout.MIDDLE_JUNCTION_TICK_VALUE);
+                drive.liftPosition(robot.LIFT_MID_JUNCTION);
             }
             // -0.065
 
             if(this.gamepad2.right_bumper) {
-                    drive.clawwwClose();
+                    drivem.closeClaw();
             }
 
             if(this.gamepad2.left_bumper) {
-                drive.clawwwOpen();
+                    drivem.openClaw();
             }
 
              leftPower    = -Range.clip(stickDrive - turn, -scout.MAX_DRIVING_POWER, scout.MAX_DRIVING_POWER);

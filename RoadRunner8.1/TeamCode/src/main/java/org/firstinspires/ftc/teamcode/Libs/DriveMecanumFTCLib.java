@@ -54,11 +54,11 @@ public class DriveMecanumFTCLib {
         double derivative, lastError=0, error;
         double integral, drivePower;
         ElapsedTime rotateTime = new ElapsedTime();
-        double maxDrivePower = 0.45;
+        double maxDrivePower = 0.3;
         double Kp = 0.025;
         double Ki = 0.001;
         double Kd = 0.01;
-        double minSpeed = 0.20;
+        double minSpeed = 0.25;
         double theta = Math.toRadians(90 + heading);
         double RF = 0, RR = 0, LF = 0, LR = 0;
 
@@ -80,9 +80,9 @@ public class DriveMecanumFTCLib {
                 lastError = error;
 
 
-                if (drivePower > -0.20 && drivePower < 0 ){
+                if (drivePower > -0.25 && drivePower < 0 ){
                     drivePower = minSpeed;
-                } else if (drivePower <0.20 && drivePower > 0){
+                } else if (drivePower <0.25 && drivePower > 0){
                     drivePower = minSpeed;
                 }
                 rflrPower = drivePower * (Math.sin(theta) - Math.cos(theta));
@@ -101,8 +101,8 @@ public class DriveMecanumFTCLib {
                 zCorrection = Math.abs(initZ - currentZ) * 0.01;
 
                 if (initZ < currentZ) {
-                    RF = rflrPower + zCorrection;
-                    RR = lfrrPower + zCorrection;
+                    RF = rflrPower + (zCorrection * 1.4);
+                    RR = lfrrPower + (zCorrection * 1.4);
                     LF = lfrrPower - zCorrection;
                     LR = rflrPower - zCorrection;
                 }

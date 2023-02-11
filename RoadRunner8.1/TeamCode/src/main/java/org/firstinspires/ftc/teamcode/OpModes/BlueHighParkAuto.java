@@ -17,9 +17,9 @@ import org.firstinspires.ftc.teamcode.Libs.DriveMecanumFTCLib;
 import java.util.List;
 import java.util.Objects;
 
-@Autonomous(name = "AutoBlueTerminal", group = "Competition")
+@Autonomous(name = "AutoBlueHighPark", group = "Competition")
 
-public class BlueTerminalAuto extends LinearOpMode {
+public class BlueHighParkAuto extends LinearOpMode {
 
     private final static HWProfile2 robot = new HWProfile2();
     private LinearOpMode opMode = this;
@@ -45,7 +45,7 @@ public class BlueTerminalAuto extends LinearOpMode {
     public DriveMecanumFTCLib drive = new DriveMecanumFTCLib(robot, opMode);
     int position = 3;
 
-    public BlueTerminalAuto(){
+    public BlueHighParkAuto(){
 
     }
 
@@ -236,26 +236,23 @@ public class BlueTerminalAuto extends LinearOpMode {
                     // raise the arm to position the cone
 
                     // Drive forward away from wall, pushing signal cone out of position
-                    drive.driveDistance(0, 2);
 
                     //strafe to zonr 
-                    drive.driveDistance(-90, 24);
+                    drive.driveDistance(90, 30);
                     sleep(500);
-                    drive.pidRotate(0, 1);
                     // drive forward to place the cone
-                    drive.driveDistance(0,50);
-                    drive.pidRotate(0, 1);
+                    drive.driveDistance(0,54);
                     sleep(500);
                     drive.liftHighJunction();
                     sleep(2000);
-                    drive.driveDistance(90, 20);
-                    drive.pidRotate(0, 1);
+                    drive.driveDistance(-90, 10);
+                    sleep(1000);
 
                     // lower the arm and release the cone
                     drive.liftMidJunction();
                     sleep(300);
                     drive.openClaw();
-
+                    sleep(300);
                     // raise the lift to keep from entangling on junction
                     drive.liftHighJunction();
                     sleep(500);
@@ -416,7 +413,7 @@ public class BlueTerminalAuto extends LinearOpMode {
 
                 case PARK:
 
-                    if(position == 3) {
+                    if(position == 1) {
                         // reset the lift
                         drive.liftReset();
                         drive.openClaw();
@@ -425,7 +422,7 @@ public class BlueTerminalAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(90,35);
+                        drive.driveDistance(-90,10);
 
                     } else if (position == 2) {
                         // reset the lift
@@ -447,11 +444,12 @@ public class BlueTerminalAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(-90,10);
+                        drive.driveDistance(90, 40);
 
                     }
 
-                    while(opModeIsActive() && robot.motorBase.getCurrentPosition() > 10){
+
+                    while(opModeIsActive() && robot.motorBase.getCurrentPosition() < -10){
                         drive.liftReset();
                     }
 

@@ -51,6 +51,7 @@ public class BlueTerminalAuto extends LinearOpMode {
 
 //    @Override
     public void runOpMode() {
+//        State runState = State.HIGH_JUNCTION_1;
         State runState = State.HIGH_JUNCTION_1;
 
         telemetry.addData("Robot State = ", "NOT READY");
@@ -140,14 +141,45 @@ public class BlueTerminalAuto extends LinearOpMode {
             switch(runState){
                 case TEST:
 
+                    /*
+                    robot.motorLF.set(1);
+                    telemetry.addData("motorLF ", "On");
+                    telemetry.addData("encoder value ", robot.motorLF.getCurrentPosition());
+                    telemetry.update();
+                    sleep(2000);
+                    robot.motorLF.stopMotor();
 
-                    /**drive.driveDistance(0, 24);
+                    robot.motorLR.set(1);
+                    telemetry.addData("motorLR ", "On");
+                    telemetry.addData("encoder value ", robot.motorLR.getCurrentPosition());
+                    telemetry.update();
+                    sleep(2000);
+                    robot.motorLR.stopMotor();
+
+                    robot.motorRF.set(1);
+                    telemetry.addData("motorRF ", "On");
+                    telemetry.addData("encoder value ", robot.motorRF.getCurrentPosition());
+                    telemetry.update();
+                    sleep(2000);
+                    robot.motorRF.stopMotor();
+
+                    robot.motorRR.set(1);
+                    telemetry.addData("motorRR ", "On");
+                    telemetry.addData("encoder value ", robot.motorRR.getCurrentPosition());
+                    telemetry.update();
+                    sleep(2000);
+                    robot.motorRR.stopMotor();
+
+                     */
+
+                    drive.driveDistance(90, 48);
                     sleep(5000);
 
-                    drive.driveDistance(180, -24);
+                    drive.driveDistance(-90, 48);
                     sleep(5000);
-                    **/
 
+
+                    /*
                     drive.pidRotate(45, 1);
                     sleep(2000);
 
@@ -187,6 +219,8 @@ public class BlueTerminalAuto extends LinearOpMode {
                     drive.pidRotate(0, 1);
                     sleep(2000);
 
+                     */
+
                     runState = State.HALT;
                     break;
 
@@ -202,7 +236,9 @@ public class BlueTerminalAuto extends LinearOpMode {
                     // raise the arm to position the cone
 
                     // Drive forward away from wall, pushing signal cone out of position
-                    drive.driveDistance(0, 3);
+                    drive.driveDistance(0, 2);
+
+                    //strafe to zonr 
                     drive.driveDistance(-90, 24);
                     sleep(500);
                     drive.pidRotate(0, 1);

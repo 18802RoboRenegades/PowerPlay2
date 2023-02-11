@@ -55,11 +55,12 @@ public class DriveMecanumFTCLib {
         double integral, drivePower;
         ElapsedTime rotateTime = new ElapsedTime();
         double maxDrivePower = 0.45;
-        double Kp = 0.05;
+        double Kp = 0.025;
         double Ki = 0.001;
         double Kd = 0.01;
-        double minSpeed = 0.15;
+        double minSpeed = 0.20;
         double theta = Math.toRadians(90 + heading);
+        double RF = 0, RR = 0, LF = 0, LR = 0;
 
         robot.motorLF.resetEncoder();
         robot.motorLR.resetEncoder();
@@ -79,42 +80,50 @@ public class DriveMecanumFTCLib {
                 lastError = error;
 
 
-                if (drivePower > -0.15 && drivePower < 0 ){
+                if (drivePower > -0.20 && drivePower < 0 ){
                     drivePower = minSpeed;
-                } else if (drivePower <0.15 && drivePower > 0){
+                } else if (drivePower <0.20 && drivePower > 0){
                     drivePower = minSpeed;
                 }
                 rflrPower = drivePower * (Math.sin(theta) - Math.cos(theta));
                 lfrrPower = drivePower * (Math.sin(theta) + Math.cos(theta));
+
+                RF = rflrPower;
+                LR = rflrPower;
+                LF = lfrrPower;
+                RR = lfrrPower;
 
                 if (initZ > 170 || initZ < -170) {
                     currentZ = gyro360(0);      // always use 0 as the reference angle
                 } else {
                     currentZ = getZAngle();
                 }
-                if (currentZ != initZ) {
-                    zCorrection = Math.abs(initZ - currentZ) / 100;
+                zCorrection = Math.abs(initZ - currentZ) * 0.01;
 
-                    if (initZ < currentZ) {
-                        rflrPower = rflrPower + zCorrection;
-                        lfrrPower = lfrrPower - zCorrection;
-                    }
-                    if (initZ > currentZ) {
-                        rflrPower = rflrPower - zCorrection;
-                        lfrrPower = lfrrPower + zCorrection;
-                    }
-                }   // end of if currentZ != initZ
-
+                if (initZ < currentZ) {
+                    RF = rflrPower + zCorrection;
+                    RR = lfrrPower + zCorrection;
+                    LF = lfrrPower - zCorrection;
+                    LR = rflrPower - zCorrection;
+                }
+                if (initZ > currentZ) {
+                    RF = rflrPower - zCorrection;
+                    RR = lfrrPower - zCorrection;
+                    LF = lfrrPower + zCorrection;
+                    LR = rflrPower + zCorrection;
+                }
                 /*
                  * Limit that value of the drive motors so that the power does not exceed 100%
                  */
-                rflrPower = Range.clip(rflrPower, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
-                lfrrPower = Range.clip(lfrrPower, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
+                RF = Range.clip(RF, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
+                LF = Range.clip(LF, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
+                RR = Range.clip(RR, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
+                LR = Range.clip(LR, -Math.abs(maxDrivePower), Math.abs(maxDrivePower));
 
                 /*
                  * Apply power to the drive wheels
                  */
-                setDrivePower(rflrPower, lfrrPower, rflrPower, lfrrPower);
+                setDrivePower(RF, LF, LR, RR);
 
                 distanceTraveled = calcDistance(heading);
                 if (distanceTraveled >= distance) {
@@ -136,8 +145,6 @@ public class DriveMecanumFTCLib {
 
             }   // end of while (opMode.opModeIsActive() && active) loop
             motorsHalt();
-            setMotorVelocityZero();
-            setDrivePower(0,0,0,0);
 
             dashTelemetry.put("p20 - drive Telemetry Data", "");
             dashTelemetry.put("p24 - Target Distance              = ", distance);
@@ -248,10 +255,10 @@ public class DriveMecanumFTCLib {
      * Function:    Shut off all drive motors
      ******************************************************************************************/
     public void motorsHalt(){
-        robot.motorRF.set(0);
-        robot.motorLF.set(0);
-        robot.motorLR.set(0);
-        robot.motorRR.set(0);
+        robot.motorRF.stopMotor();
+        robot.motorLF.stopMotor();
+        robot.motorLR.stopMotor();
+        robot.motorRR.stopMotor();
     }   // end of motorsHalt method
 
 

@@ -69,26 +69,36 @@ public class __MecanumWheelDrive__ extends LinearOpMode
         double strafe = 0;
         double leftPower = 0;
         double rightPower = 0;
-        double armUpDown;
+//        double armUpDown;
+        int armPosition = 0;
 
         while (opModeIsActive()) {
             stickDrive = gamepad1.left_stick_y * DriveSpeed;
             turn = this.gamepad1.right_stick_x * TurnSpeed;
             strafe = this.gamepad1.left_stick_x * StrafeSpeed;
-            armUpDown = this.gamepad2.left_stick_y * ArmUpDownSpeed;
+//            armUpDown = this.gamepad2.left_stick_y * ArmUpDownSpeed;
 
 
             if(this.gamepad2.y) {
-                drive.liftPosition(robot.LIFT_HIGH_JUNCTION);
+                armPosition = robot.LIFT_HIGH_JUNCTION;
+//                drive.liftPosition(robot.LIFT_HIGH_JUNCTION);
             } else if(this.gamepad2.a) {
-                drive.liftPosition(robot.LIFT_RESET);
+                armPosition =  robot.LIFT_RESET;
+//                drive.liftPosition(robot.LIFT_RESET);
             } else if(this.gamepad2.b){
-                drive.liftPosition(robot.LIFT_LOW_JUNCTION);
+                armPosition = robot.LIFT_LOW_JUNCTION;
+//                drive.liftPosition(robot.LIFT_LOW_JUNCTION);
             } else if(this.gamepad2.x) {
-                drive.liftPosition(robot.LIFT_MID_JUNCTION);
+                armPosition = robot.LIFT_MID_JUNCTION;
+//                drive.liftPosition(robot.LIFT_MID_JUNCTION);
+            } else if(this.gamepad2.dpad_up){
+                armPosition = armPosition + 10;
+            } else if(this.gamepad2.dpad_down){
+                armPosition = armPosition - 10;
             }
             // -0.065
 
+            drive.liftPosition(armPosition);
             if(this.gamepad2.right_bumper) {
                     drivem.closeClaw();
             }
@@ -105,7 +115,8 @@ public class __MecanumWheelDrive__ extends LinearOpMode
             scout.leftRearWheelMotor.setPower(leftPower + strafePower);
             scout.rightFrontWheelMotor.setPower(rightPower + strafePower);
             scout.rightRearWheelMotor.setPower(rightPower - strafePower);
-//            scout.elevatorMotor.setPower(armUpDown);
+            scout.elevatorMotor.setPower(1);
+            scout.elevatorMotor.setTargetPosition(armPosition);
 
             //drive.StrafeDrive(stickDrive, turn, strafe);
             //telemetry.addData("bruhdatderepositionrightdere = ", trapdoor);

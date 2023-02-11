@@ -79,7 +79,6 @@ public class DriveMecanumFTCLib {
                 drivePower = ((Kp * error) + (Ki * integral) + (Kd * derivative));
                 lastError = error;
 
-
                 if (drivePower > -0.25 && drivePower < 0 ){
                     drivePower = minSpeed;
                 } else if (drivePower <0.25 && drivePower > 0){
@@ -189,7 +188,8 @@ public class DriveMecanumFTCLib {
         // check to see how far the robot is rotating to decide which gyro sensor value to use
 
         targetAngle = Math.toRadians(targetAngle);  // convert targetAngle to radians
-        error = 100 * (getZAngleRadians() - targetAngle);
+//        error = 100 * (getZAngleRadians() - targetAngle);
+        error = (getZAngleRadians() - Math.toRadians(targetAngle));
 
         // reset the time to track rotation speed
         rotateTime.reset();
@@ -215,7 +215,8 @@ public class DriveMecanumFTCLib {
             setDrivePower(rightRotate, leftRotate, leftRotate, rightRotate);
 
             // check to see how far the robot is rotating to decide which gyro sensor value to use
-            error = 100 * (getZAngleRadians() - targetAngle);
+//            error = 100 * (getZAngleRadians() - targetAngle);
+            error = (getZAngleRadians() - Math.toRadians(targetAngle));
 
             dashTelemetry.put("p00 - PIDTurn Telemetry Data", "");
             dashTelemetry.put("p01 - PID IMU Angle X              = ", getZAngle());

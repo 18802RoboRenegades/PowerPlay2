@@ -303,6 +303,17 @@ public class DriveMecanumFTCLib {
         robot.motorBase.setTargetPosition(targetPosition);
     }   // end of liftPosition method
 
+    public void StrafeDrive(double drive, double turn, double strafe) {
+
+        double leftPower    = -Range.clip(drive - turn, -robot.MAX_DRIVING_POWER, robot.MAX_DRIVING_POWER);
+        double rightPower   = -Range.clip(drive + turn, -robot.MAX_DRIVING_POWER, robot.MAX_DRIVING_POWER);
+        double strafePower = Range.clip(-strafe, -robot.MAX_DRIVING_POWER, robot.MAX_DRIVING_POWER);
+
+        robot.motorLF.set(leftPower - strafePower);
+        robot.motorLR.set(leftPower + strafePower);
+        robot.motorRF.set(rightPower + strafePower);
+        robot.motorRR.set(rightPower - strafePower);
+    }
 
     /*******************************************************************************************
      * Method:      calcDistance

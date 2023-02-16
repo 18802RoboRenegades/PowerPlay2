@@ -36,6 +36,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Hardware.HWProfile2;
+
 
 @TeleOp(name="__System Test", group="Test Mode")
 
@@ -45,7 +47,7 @@ public class SystemTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private Hardware3 scout = new Hardware3();
+    private HWProfile2 robot = new HWProfile2();
     private double servoPosition = 0;
     private double trapdoor = 0;
     private double clawPositionValue = 0.5;
@@ -54,7 +56,7 @@ public class SystemTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        scout.init(hardwareMap);
+        robot.init(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -80,39 +82,39 @@ public class SystemTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if(gamepad1.dpad_up) {
-                scout.leftFrontWheelMotor.setPower(1);
+                robot.motorLF.set(1);
             } else {
-                scout.leftFrontWheelMotor.setPower(0);
+                robot.motorLF.set(0);
             }
 
             if(gamepad1.dpad_down) {
-                scout.leftRearWheelMotor.setPower(1);
+                robot.motorLR.set(1);
             } else {
-                scout.leftRearWheelMotor.setPower(0);
+                robot.motorLR.set(0);
             }
 
             if(gamepad1.dpad_left) {
-                scout.rightFrontWheelMotor.setPower(1);
+                robot.motorRF.set(1);
             } else {
-                scout.rightFrontWheelMotor.setPower(0);
+                robot.motorRF.set(0);
             }
 
             if(gamepad1.dpad_right) {
-                scout.rightRearWheelMotor.setPower(1);
+                robot.motorRR.set(1);
             } else {
-                scout.rightRearWheelMotor.setPower(0);
+                robot.motorRR.set(0);
             }
 
             if(gamepad1.y) {
-                scout.leftFrontWheelMotor.setPower(1);
-                scout.leftRearWheelMotor.setPower(1);
-                scout.rightFrontWheelMotor.setPower(1);
-                scout.rightRearWheelMotor.setPower(1);
+                robot.motorLF.set(1);
+                robot.motorLR.set(1);
+                robot.motorRF.set(1);
+                robot.motorRR.set(1);
             } else {
-                scout.leftFrontWheelMotor.setPower(0);
-                scout.leftRearWheelMotor.setPower(0);
-                scout.rightFrontWheelMotor.setPower(0);
-                scout.rightRearWheelMotor.setPower(0);
+                robot.motorLF.set(0);
+                robot.motorLR.set(0);
+                robot.motorRF.set(0);
+                robot.motorRR.set(0);
             }
 
             if(gamepad1.right_bumper) {
@@ -120,29 +122,29 @@ public class SystemTest extends LinearOpMode {
             } else if (gamepad1.left_bumper) {
                 elevatorPosition -= 10;
             }
-            double liftPower = scout.GOING_UP_SPEED;
+            double liftPower = robot.GOING_UP_SPEED;
 
-            if (scout.elevatorMotor.getCurrentPosition() > elevatorPosition) {
-                liftPower = scout.GOING_DOWN_SPEED;
+            if (robot.motorBase.getCurrentPosition() > elevatorPosition) {
+                liftPower = robot.GOING_DOWN_SPEED;
             } else {
-                liftPower = scout.GOING_UP_SPEED;
+                liftPower = robot.GOING_UP_SPEED;
             }
-            scout.elevatorMotor.setTargetPosition(elevatorPosition);
-            scout.elevatorMotor.setPower(liftPower);
+            robot.motorBase.setTargetPosition(elevatorPosition);
+            robot.motorBase.setPower(liftPower);
 
             if(gamepad1.right_trigger > 0) {
                 clawPositionValue += 0.02;
             } else if (gamepad1.left_trigger > 0) {
                 clawPositionValue -= 0.02;
             }
-            scout.clawServo.setPosition(clawPositionValue);
+            robot.clawServo.setPosition(clawPositionValue);
 
             telemetry.addData("Claw Position = ", clawPositionValue);
-            telemetry.addData("Right Front Encoder = ", scout.rightFrontWheelMotor.getCurrentPosition());
-            telemetry.addData("Right Rear Encoder = ", scout.rightRearWheelMotor.getCurrentPosition());
-            telemetry.addData("Left Front Encoder = ", scout.leftFrontWheelMotor.getCurrentPosition());
-            telemetry.addData("Left Rear Encoder = ", scout.leftRearWheelMotor.getCurrentPosition());
-            telemetry.addData("Elevator Encoder = ", scout.elevatorMotor.getCurrentPosition());
+            telemetry.addData("Right Front Encoder = ", robot.motorRF.getCurrentPosition());
+            telemetry.addData("Right Rear Encoder = ", robot.motorRR.getCurrentPosition());
+            telemetry.addData("Left Front Encoder = ", robot.motorLF.getCurrentPosition());
+            telemetry.addData("Left Rear Encoder = ", robot.motorLR.getCurrentPosition());
+            telemetry.addData("Elevator Encoder = ", robot.motorBase.getCurrentPosition());
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }

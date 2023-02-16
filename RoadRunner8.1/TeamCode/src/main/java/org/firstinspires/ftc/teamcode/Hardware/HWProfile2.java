@@ -35,20 +35,27 @@ public class HWProfile2 {
     public final double DRIVE_TICKS_PER_INCH = 16;
     public final double STRAFE_FACTOR = 0.9;
 
+    public final double RIGHT_DRIVE_CORRECTION_MULTIPLIER = 1.4;
+    public final double LEFT_DRIVE_CORRECTION_MULTIPLIER = 1.2;
+
+    public final double MAX_DRIVING_POWER = 1;
+
     public final int LIFT_RESET = 0;
     public final int LIFT_MIN_LOW = 0;
     public final int LIFT_MAX_HIGH = -4600;
-    public final int LIFT_LOW_JUNCTION = -1928;
-    public final int LIFT_MID_JUNCTION = -3320;
-    public final int LIFT_HIGH_JUNCTION = -4550;
+    public final int LIFT_LOW_JUNCTION = -1900;
+    public final int LIFT_MID_JUNCTION = -3300;
+    public final int LIFT_HIGH_JUNCTION = -4500;
     public final int LIFT_EXTRACT_CONE = -1100;
-    public final int LIFT_CONE5 = -680;
-    public final int LIFT_CONE4 = -550;
-    public final int LIFT_CONE3 = -300;
-    public final int LIFT_CONE2 = -200;
+    public final int LIFT_CONE5 = -1000;
+    public final int LIFT_CONE4 = -830;
+    public final int LIFT_CONE3 = -680;
+    public final int LIFT_CONE2 = -530;
     public final double LIFT_POWER = 1;
     public final double SERVO_GRAB_OPEN = 0.38;
     public final double SERVO_GRAB_CLOSE = 0.61;
+    public final double GOING_UP_SPEED = 0.1;
+    public final double GOING_DOWN_SPEED = -0.1;
 
     public final double PID_Kp = 0.08;
     public final double PID_Ki = 0.01;
@@ -73,10 +80,10 @@ public class HWProfile2 {
     public DistanceSensor sensorJunction;
     public DistanceSensor sensorJunction2;
 
-    public MotorEx motorLF = null;
-    public MotorEx motorLR = null;
-    public MotorEx motorRF = null;
-    public MotorEx motorRR = null;
+    public MotorEx motorLF;
+    public MotorEx motorLR ;
+    public MotorEx motorRF ;
+    public MotorEx motorRR;
 
     public MecanumDrive mecanum = null;
 

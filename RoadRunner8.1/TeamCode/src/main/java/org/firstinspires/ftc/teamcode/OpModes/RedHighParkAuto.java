@@ -236,17 +236,16 @@ public class RedHighParkAuto extends LinearOpMode {
                     // raise the arm to position the cone
 
                     // Drive forward away from wall, pushing signal cone out of position
-                    drive.driveDistance(0, 1);
 
                     //strafe to zonr 
                     drive.driveDistance(-90, 24);
                     sleep(500);
                     // drive forward to place the cone
-                    drive.driveDistance(0,51);
+                    drive.driveDistance(0,52);
                     sleep(500);
                     drive.liftHighJunction();
                     sleep(2000);
-                    drive.driveDistance(90, 18);
+                    drive.driveDistance(90, 17);
                     sleep(1000);
 
                     // lower the arm and release the cone
@@ -416,7 +415,6 @@ public class RedHighParkAuto extends LinearOpMode {
 
                     if(position == 1) {
                         // reset the lift
-                        drive.liftReset();
                         drive.openClaw();
 
                         // rotate towards the stack to park - ready to grab the first cone in teleop
@@ -427,7 +425,6 @@ public class RedHighParkAuto extends LinearOpMode {
 
                     } else if (position == 2) {
                         // reset the lift
-                        drive.liftReset();
                         drive.openClaw();
 
                         // rotate towards the outside wall position
@@ -438,7 +435,6 @@ public class RedHighParkAuto extends LinearOpMode {
 
                     } else {
                         // reset the lift
-                        drive.liftReset();
                         drive.openClaw();
 
                         // rotate towards the outside wall position

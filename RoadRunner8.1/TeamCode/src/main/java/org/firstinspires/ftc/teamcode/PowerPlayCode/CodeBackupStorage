@@ -31,6 +31,261 @@ clawClose:
 
 
 
+                                Hardware3:
+
+package org.firstinspires.ftc.teamcode.PowerPlayCode;
+
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.CRServoImpl;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+public class Hardware3 {
+    // Drive motors
+    public DcMotor leftFrontWheelMotor;
+    public DcMotor rightFrontWheelMotor;
+    public DcMotor leftRearWheelMotor;
+    public DcMotor rightRearWheelMotor;
+    public DcMotor elevatorMotor;
+    public Servo clawServo;
+
+    public BNO055IMU gyro;
+
+    final public double ROTATION_POWER = 0.4;
+    final public double MAX_DRIVING_POWER = 0.75;
+    final public double CAROUSEL_POWER = 0.7;
+    final public double TICKS_PER_INCH = 16;
+    final public double AUTONOMOUS_DRIVING_POWER = 0.5;
+    public int TOP_JUNCTION_TICK_VALUE = -4000;
+    public int MIDDLE_JUNCTION_TICK_VALUE = -2840;
+    public int BOTTOM_JUNCTION_TICK_VALUE = -1620;
+    public int FLOOR_TICK_VALUE = 0;
+    public double GOING_UP_SPEED = 1;
+    public double GOING_DOWN_SPEED = -0.6;
+    public int ELEVATOR_TOP_CLIP = -4000;
+    public int ELEVATOR_BOTTOM_CLIP = 0;
+
+    public void init (HardwareMap hardwareMap)
+    {
+        // Defining motors and servos
+        leftFrontWheelMotor = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFrontWheelMotor = hardwareMap.get(DcMotor.class, "rightFront");
+        leftRearWheelMotor = hardwareMap.get(DcMotor.class, "leftRear");
+        rightRearWheelMotor = hardwareMap.get(DcMotor.class, "rightRear");
+        elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
+
+        //Defining sensors
+        gyro = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "gyro.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "gyro";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        gyro.initialize(parameters);
+
+        // Setting Motor Power so the motors don't go crazy when initializing
+        leftFrontWheelMotor.setPower(0);
+        rightFrontWheelMotor.setPower(0);
+        leftRearWheelMotor.setPower(0);
+        rightRearWheelMotor.setPower(0);
+
+        rightFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Motor Mode
+        leftFrontWheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontWheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftRearWheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightRearWheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevatorMotor.setTargetPosition(0);
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Motor ZeroPowerBehavior
+        leftFrontWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRearWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRearWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // setting Direction
+        // USE THIS TO CHANGE MOTOR DIRECTION OVER ALL FUNCTIONS!!
+        leftFrontWheelMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftRearWheelMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontWheelMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightRearWheelMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        // setting the select servos to position 0
+        //clawServo.setPosition(0.5);
+
+        // init code
+
+    }
+
+DriveClassEnergize:
+
+package org.firstinspires.ftc.teamcode.PowerPlayCode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+public class DriveClassEnergize {
+
+
+    private Hardware3 scout;
+    private LinearOpMode opMode;
+
+    public DriveClassEnergize(Hardware3 scout1, LinearOpMode opMode1) {
+        scout = scout1;
+        opMode = opMode1;
+    }
+
+    public void DriveByTime(double power, double seconds){
+        ElapsedTime runTime = new ElapsedTime();
+        double startTime = runTime.time();
+
+        while(seconds >= (runTime.time() - startTime)){
+
+            scout.leftFrontWheelMotor.setPower(power);
+            scout.leftRearWheelMotor.setPower(power);
+            scout.rightFrontWheelMotor.setPower(power);
+            scout.rightRearWheelMotor.setPower(power);
+
+        }
+        halt();
+    }
+
+
+    public void halt(){
+        scout.leftFrontWheelMotor.setPower(0);
+        scout.leftRearWheelMotor.setPower(0);
+        scout.rightFrontWheelMotor.setPower(0);
+        scout.rightRearWheelMotor.setPower(0);
+    }
+
+    public void haltandresetencoders(){
+        scout.leftFrontWheelMotor.setPower(0);
+        scout.leftRearWheelMotor.setPower(0);
+        scout.rightFrontWheelMotor.setPower(0);
+        scout.rightRearWheelMotor.setPower(0);
+        scout.rightFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        scout.leftFrontWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        scout.rightRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        scout.leftRearWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public boolean PrecisionDriveForwardReverse(double power, double inches) {
+        // ticks per revolution is 538
+        // gear ratio is 1.5 or 2:3
+
+        double leftFrontDistance = 0;
+        double leftRearDistance = 0;
+        double rightFrontDistance = 0;
+        double rightRearDistance = 0;
+        int leftFrontEncoderStart = scout.leftFrontWheelMotor.getCurrentPosition();
+        int leftRearEncoderStart = scout.leftRearWheelMotor.getCurrentPosition();
+        int rightFrontEncoderStart = scout.rightFrontWheelMotor.getCurrentPosition();
+        int rightRearEncoderStart = scout.rightRearWheelMotor.getCurrentPosition();
+
+        boolean isClawOpen = true;
+
+        double averageEncoderReading = 0;
+        while (Math.abs(averageEncoderReading) < Math.abs(scout.TICKS_PER_INCH * inches)){
+
+            scout.leftFrontWheelMotor.setPower(power);
+            scout.leftRearWheelMotor.setPower(power);
+            scout.rightFrontWheelMotor.setPower(power);
+            scout.rightRearWheelMotor.setPower(power);
+
+            leftFrontDistance = scout.leftFrontWheelMotor.getCurrentPosition() - leftFrontEncoderStart;
+            leftRearDistance = scout.leftRearWheelMotor.getCurrentPosition() - leftRearEncoderStart;
+            rightFrontDistance = scout.rightFrontWheelMotor.getCurrentPosition() - rightFrontEncoderStart;
+            rightRearDistance = scout.rightRearWheelMotor.getCurrentPosition() - rightRearEncoderStart;
+
+            averageEncoderReading = (leftFrontDistance + leftRearDistance
+                    + rightFrontDistance + rightRearDistance) / 4;
+
+        } // end of while loop
+
+        scout.leftFrontWheelMotor.setPower(0);
+        scout.leftRearWheelMotor.setPower(0);
+        scout.rightFrontWheelMotor.setPower(0);
+        scout.rightRearWheelMotor.setPower(0);
+        return true;
+    }
+
+    public void StrafeDrive(double drive, double turn, double strafe) {
+
+        double leftPower    = -Range.clip(drive - turn, -scout.MAX_DRIVING_POWER, scout.MAX_DRIVING_POWER);
+        double rightPower   = -Range.clip(drive + turn, -scout.MAX_DRIVING_POWER, scout.MAX_DRIVING_POWER);
+        double strafePower = Range.clip(-strafe, -scout.MAX_DRIVING_POWER, scout.MAX_DRIVING_POWER);
+
+        scout.leftFrontWheelMotor.setPower(leftPower - strafePower);
+        scout.leftRearWheelMotor.setPower(leftPower + strafePower);
+        scout.rightFrontWheelMotor.setPower(rightPower + strafePower);
+        scout.rightRearWheelMotor.setPower(rightPower - strafePower);
+    }
+
+    /**
+     *          double leftPower    = -Range.clip(drive + turn, -maxDrivingPower, maxDrivingPower) ;
+     *         double rightPower   = Range.clip(drive - turn, -maxDrivingPower, maxDrivingPower) ;
+     *         double strafePower = Range.clip( strafe, -maxDrivingPower, maxDrivingPower );
+     *
+     *         this.LeftFrontWheelMotor.setPower(leftPower - strafePower);
+     *         this.LeftRearWheelMotor.setPower(rightPower - strafePower);
+     *         this.RightFrontWheelMotor.setPower(leftPower + strafePower);
+     *         this.RightRearWheelMotor.setPower(rightPower + strafePower);
+     */
+
+    public void Clawwww(boolean putAtrueBooleanHere) {
+        if (putAtrueBooleanHere == true) {
+            scout.clawServo.setPosition(0); // NEEDS A VALUE FOR THE POSITION OF THE CLOSED CLAW!
+        } else if (putAtrueBooleanHere == false){
+            scout.clawServo.setPosition(0.42); //NEEDS A VALUE FOR THE POSITION OF THE OPEN CLAW!
+        }
+    }
+
+    public void clawwwOpen() {
+        scout.clawServo.setPosition(0.33);
+    }
+
+    public void clawwwClose() {scout.clawServo.setPosition(0.55);}
+
+    public void liftPosition (int targetposition) {
+
+        double liftPower = scout.GOING_DOWN_SPEED;
+
+        if (scout.elevatorMotor.getCurrentPosition() > targetposition) {
+            liftPower = scout.GOING_UP_SPEED;
+        }
+
+        scout.elevatorMotor.setTargetPosition(targetposition);
+        scout.elevatorMotor.setPower(liftPower);
+
+    }
+
+    /**
+    public void armUp() {
+        scout.fourarmMotor.setPower(1);
+    }
+
+    public void armDown() {
+        scout.fourarmMotor.setPower(-1);
+    }
+    **/
+}
+
+
+
+
 public boolean PrecisionDriveForwardReverse(double power, double inches) {
         // ticks per revolution is 538
         // gear ratio is 1.5 or 2:3

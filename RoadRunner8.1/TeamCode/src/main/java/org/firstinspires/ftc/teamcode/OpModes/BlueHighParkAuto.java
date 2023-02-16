@@ -241,7 +241,7 @@ public class BlueHighParkAuto extends LinearOpMode {
                     drive.driveDistance(90, 30);
                     sleep(500);
                     // drive forward to place the cone
-                    drive.driveDistance(0,54);
+                    drive.driveDistance(0,52);
                     sleep(500);
                     drive.liftHighJunction();
                     sleep(2000);
@@ -422,7 +422,8 @@ public class BlueHighParkAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(-90,10);
+                        drive.driveDistance(90,12);
+                        drive.driveDistance(180, 2);
 
                     } else if (position == 2) {
                         // reset the lift
@@ -433,7 +434,7 @@ public class BlueHighParkAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(90,10);
+                        drive.driveDistance(-90,12);
 
                     } else {
                         // reset the lift
@@ -444,7 +445,7 @@ public class BlueHighParkAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(90, 40);
+                        drive.driveDistance(-90, 40);
 
                     }
 

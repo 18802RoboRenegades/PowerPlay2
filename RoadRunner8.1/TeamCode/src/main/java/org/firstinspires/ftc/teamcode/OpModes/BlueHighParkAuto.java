@@ -241,7 +241,7 @@ public class BlueHighParkAuto extends LinearOpMode {
                     drive.driveDistance(90, 30);
                     sleep(500);
                     // drive forward to place the cone
-                    drive.driveDistance(0,52);
+                    drive.driveDistance(0,53);
                     sleep(500);
                     drive.liftHighJunction();
                     sleep(2000);
@@ -255,10 +255,9 @@ public class BlueHighParkAuto extends LinearOpMode {
                     sleep(300);
                     // raise the lift to keep from entangling on junction
                     drive.liftHighJunction();
-                    sleep(500);
                     // back away from the junction
 
-                    runState = State.PARK;
+                    runState = State.CONE_2;
                     break;
 
                 case CONE_2:        // top cone of the starter stack
@@ -271,24 +270,13 @@ public class BlueHighParkAuto extends LinearOpMode {
                     //drive towards the stack of cones
                     drive.driveDistance(0,16);
 
-                    // adjust direction - turn towards cone stack
-                    drive.pidRotate(90, robot.PID_ROTATE_ERROR);
-
-                    //drive towards the stack of cones
-                    drive.driveDistance(0,12);
-
-                    // close the claw to grab the cone
                     drive.closeClaw();
-                    sleep(300);
+                    sleep(500);
 
-                    //back away from the wall slightly
-                    drive.driveDistance(180,1);
+                    drive.liftLowJunction();
+                    sleep(500);
 
-                    // lift the cone up to clear the stack
-                    drive.liftPosition(robot.LIFT_EXTRACT_CONE);
-                    sleep(300);
-
-                    runState = State.LOW_JUNCTION_2;
+                    //runState = State.LOW_JUNCTION_2;
                     break;
 
                 case LOW_JUNCTION_2:    // low junction 1st pass

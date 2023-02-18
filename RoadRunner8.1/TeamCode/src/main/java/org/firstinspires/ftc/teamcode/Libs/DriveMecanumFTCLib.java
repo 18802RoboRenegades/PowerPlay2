@@ -212,7 +212,11 @@ public class DriveMecanumFTCLib {
             leftRotate = -rotationSpeed;
             rightRotate = rotationSpeed;
 
-            setDrivePower(rightRotate, leftRotate, leftRotate, rightRotate);
+
+            robot.motorRF.set(rightRotate);
+            robot.motorLF.set(leftRotate);
+            robot.motorLR.set(leftRotate);
+            robot.motorRR.set(rightRotate);
 
             // check to see how far the robot is rotating to decide which gyro sensor value to use
 //            error = 100 * (getZAngleRadians() - targetAngle);

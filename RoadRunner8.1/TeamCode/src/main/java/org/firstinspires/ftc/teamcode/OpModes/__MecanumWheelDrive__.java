@@ -35,11 +35,15 @@ public class __MecanumWheelDrive__ extends LinearOpMode
     public DriveMecanumFTCLib drive = new DriveMecanumFTCLib(robot, opMode);
     private DistanceSensor sensorColorRange;
     private Servo servoTest;
+    private boolean pad2input = true;
 
     private double DriveSpeed = 1;
     private double TurnSpeed = 1;
     private double StrafeSpeed = 1;
 
+    private boolean isStickPressed = false;
+    private boolean isRightStickPressed = false;
+    private boolean stickClaw = true;
     public void runOpMode()
     {
         robot.init(hardwareMap);
@@ -99,8 +103,23 @@ public class __MecanumWheelDrive__ extends LinearOpMode
                 armPosition = robot.LIFT_CONE3;
             }
 
-            if (this.gamepad2.left_stick_y  > 0.05 || this.gamepad2.left_stick_y < -0.05) {
+            if (this.gamepad2.left_stick_y  > 0.05  && isStickPressed == false || this.gamepad2.left_stick_y < -0.05 && isStickPressed == false) {
                 armPosition += this.gamepad2.left_stick_y * 10;
+            }
+
+            if (this.gamepad2.left_stick_button) {
+                isStickPressed = true;
+            } else if (!this.gamepad2.left_stick_button && isStickPressed) {
+                isStickPressed = false;
+            }
+
+            if (isStickPressed == true && pad2input == true) {
+                drive.openClaw();
+                pad2input = false;
+
+            } else if (isStickPressed == false && pad2input == false) {
+                drive.closeClaw();
+                pad2input = true;
             }
 
             // -0.065

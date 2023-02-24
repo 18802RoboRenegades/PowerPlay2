@@ -137,49 +137,19 @@ public class BlueHighParkAuto extends LinearOpMode {
 
         if(isStopRequested()) requestOpModeStop();   // user requested to abort setup
 
+
         while (opModeIsActive()) {
             switch(runState){
                 case TEST:
-
-                    /*
-                    robot.motorLF.set(1);
-                    telemetry.addData("motorLF ", "On");
-                    telemetry.addData("encoder value ", robot.motorLF.getCurrentPosition());
-                    telemetry.update();
-                    sleep(2000);
-                    robot.motorLF.stopMotor();
-
-                    robot.motorLR.set(1);
-                    telemetry.addData("motorLR ", "On");
-                    telemetry.addData("encoder value ", robot.motorLR.getCurrentPosition());
-                    telemetry.update();
-                    sleep(2000);
-                    robot.motorLR.stopMotor();
-
-                    robot.motorRF.set(1);
-                    telemetry.addData("motorRF ", "On");
-                    telemetry.addData("encoder value ", robot.motorRF.getCurrentPosition());
-                    telemetry.update();
-                    sleep(2000);
-                    robot.motorRF.stopMotor();
-
-                    robot.motorRR.set(1);
-                    telemetry.addData("motorRR ", "On");
-                    telemetry.addData("encoder value ", robot.motorRR.getCurrentPosition());
-                    telemetry.update();
-                    sleep(2000);
-                    robot.motorRR.stopMotor();
-
-                     */
-
+/**
                     drive.driveDistance(90, 48);
                     sleep(5000);
 
                     drive.driveDistance(-90, 48);
                     sleep(5000);
+**/
 
 
-                    /*
                     drive.pidRotate(45, 1);
                     sleep(2000);
 
@@ -219,7 +189,7 @@ public class BlueHighParkAuto extends LinearOpMode {
                     drive.pidRotate(0, 1);
                     sleep(2000);
 
-                     */
+
 
                     runState = State.HALT;
                     break;
@@ -276,18 +246,25 @@ public class BlueHighParkAuto extends LinearOpMode {
                     drive.liftLowJunction();
                     sleep(500);
 
-                    //runState = State.LOW_JUNCTION_2;
+                    drive.driveDistance(180, 6);
+                    drive.liftReset();
+                    drive.openClaw();
+                    sleep(300);
+                    drive.closeClaw();
+
+                    runState = State.LOW_JUNCTION_2;
                     break;
 
                 case LOW_JUNCTION_2:    // low junction 1st pass
                     // back away to tile 2
-                    drive.driveDistance(180,22);
+                    drive.driveDistance(180,16);
 
-                    // lift the rest of the way to low junction
+                    drive.pidRotate(135, robot.PID_ROTATE_ERROR);
+
                     drive.liftPosition(robot.LIFT_LOW_JUNCTION);
 
                     // rotate towards the low junction
-                    drive.pidRotate(135, robot.PID_ROTATE_ERROR);
+
 
                     // drive towards the junction to place the cone
                     drive.driveDistance(0, 8);

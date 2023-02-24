@@ -140,6 +140,7 @@ public class SystemTest extends LinearOpMode {
             robot.clawServo.setPosition(clawPositionValue);
 
             telemetry.addData("Claw Position = ", clawPositionValue);
+            telemetry.addData("Actual Claw Position = ", robot.clawServo.getPosition());
             telemetry.addData("Right Front Encoder = ", robot.motorRF.getCurrentPosition());
             telemetry.addData("Right Rear Encoder = ", robot.motorRR.getCurrentPosition());
             telemetry.addData("Left Front Encoder = ", robot.motorLF.getCurrentPosition());

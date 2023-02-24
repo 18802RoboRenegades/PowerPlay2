@@ -93,8 +93,7 @@ public class RedHighParkAuto extends LinearOpMode {
         robot.motorBase.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
-
+        telemetry.addData("Status", "Ready to run");
         while(!isStarted() && !isStopRequested()) {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
@@ -140,6 +139,8 @@ public class RedHighParkAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch(runState){
                 case TEST:
+                    drive.driveDistance(180, 50);
+
 
                     /*
                     robot.motorLF.set(1);
@@ -170,7 +171,7 @@ public class RedHighParkAuto extends LinearOpMode {
                     sleep(2000);
                     robot.motorRR.stopMotor();
 
-                     */
+
 
                     drive.driveDistance(90, 48);
                     sleep(5000);
@@ -179,7 +180,7 @@ public class RedHighParkAuto extends LinearOpMode {
                     sleep(5000);
 
 
-                    /*
+
                     drive.pidRotate(45, 1);
                     sleep(2000);
 
@@ -238,14 +239,16 @@ public class RedHighParkAuto extends LinearOpMode {
                     // Drive forward away from wall, pushing signal cone out of position
 
                     //strafe to zonr 
-                    drive.driveDistance(-90, 24);
+                    drive.driveDistance(-90, 20);
                     sleep(500);
                     // drive forward to place the cone
-                    drive.driveDistance(0,52);
+                    drive.driveDistance(0,51);
                     sleep(500);
                     drive.liftHighJunction();
                     sleep(2000);
-                    drive.driveDistance(90, 17);
+                    drive.driveDistance(90, 13);
+                    sleep(200);
+                    drive.driveDistance(0, 1);
                     sleep(1000);
 
                     // lower the arm and release the cone
@@ -253,73 +256,75 @@ public class RedHighParkAuto extends LinearOpMode {
                     sleep(300);
                     drive.openClaw();
                     sleep(300);
+                    drive.driveDistance(180, 1);
                     // raise the lift to keep from entangling on junction
-                    drive.liftHighJunction();
-                    sleep(500);
-                    // back away from the junction
 
-                    runState = State.PARK;
+
+                    runState = State.CONE_2;
                     break;
 
                 case CONE_2:        // top cone of the starter stack
                     //rotate towards the cone stack
-                    drive.pidRotate(90, robot.PID_ROTATE_ERROR);
 
                     // lower the arm to pick up the top cone
                     drive.liftPosition(robot.LIFT_CONE5);
 
-                    //drive towards the stack of cones
-                    drive.driveDistance(0,16);
-
                     // adjust direction - turn towards cone stack
-                    drive.pidRotate(90, robot.PID_ROTATE_ERROR);
+                    drive.pidRotate(-90, robot.PID_ROTATE_ERROR);
+                    sleep(500);
 
                     //drive towards the stack of cones
-                    drive.driveDistance(0,12);
+                    drive.driveDistance(0,34);
+                    sleep(500);
 
                     // close the claw to grab the cone
                     drive.closeClaw();
                     sleep(300);
 
                     //back away from the wall slightly
-                    drive.driveDistance(180,1);
 
                     // lift the cone up to clear the stack
                     drive.liftPosition(robot.LIFT_EXTRACT_CONE);
                     sleep(300);
+                    drive.driveDistance(180, 7);
+                    sleep(500);
+                    drive.liftReset();
+                    sleep(1000);
+                    drive.openClaw();
+                    sleep(300);
+                    drive.closeClaw();
 
                     runState = State.LOW_JUNCTION_2;
                     break;
 
                 case LOW_JUNCTION_2:    // low junction 1st pass
                     // back away to tile 2
-                    drive.driveDistance(180,22);
-
-                    // lift the rest of the way to low junction
-                    drive.liftPosition(robot.LIFT_LOW_JUNCTION);
-
-                    // rotate towards the low junction
+                    drive.driveDistance(180, 6);
+                    sleep(200);
                     drive.pidRotate(135, robot.PID_ROTATE_ERROR);
+                    sleep(200);
 
-                    // drive towards the junction to place the cone
-                    drive.driveDistance(0, 8);
+                    drive.liftPosition(robot.LIFT_MID_JUNCTION);
+                    sleep(2000);
 
+                    drive.driveDistance(0, 4);
+                    sleep(200);
                     // place the cone
-                    drive.liftPosition(robot.LIFT_RESET);
+                    drive.liftReset();
                     sleep(200);
                     drive.openClaw();
-
-                    // raise the lift to clear the junction
-                    drive.liftLowJunction();
                     sleep(200);
 
+                    // raise the lift to clear the junction
+
                     // back away from the junction
-                    drive.driveDistance(180, 8);
+                    drive.driveDistance(-180, 4);
+                    sleep(500);
 
                     // turn towards the starter stack
-                    drive.pidRotate(90, robot.PID_ROTATE_ERROR);
+                    drive.pidRotate(0, robot.PID_ROTATE_ERROR);
 
-                    runState = State.CONE_3;
+                    runState = State.PARK;
                     break;
 
                 case CONE_3:        // 4th cone up from starter stack
@@ -421,9 +426,9 @@ public class RedHighParkAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(90,40);
+                        drive.driveDistance(90,25);
 
-                    } else if (position == 2) {
+                    } else if (position == 3) {
                         // reset the lift
                         drive.openClaw();
 
@@ -431,23 +436,8 @@ public class RedHighParkAuto extends LinearOpMode {
                         //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
 
                         // drive to park position 1
-                        drive.driveDistance(90,15);
+                        drive.driveDistance(-90,25);
 
-                    } else {
-                        // reset the lift
-                        drive.openClaw();
-
-                        // rotate towards the outside wall position
-                        //drive.PIDRotate(-90, robot.PID_ROTATE_ERROR);
-
-                        // drive to park position 1
-                        drive.driveDistance(-90, 15);
-
-                    }
-
-
-                    while(opModeIsActive() && robot.motorBase.getCurrentPosition() < -10){
-                        drive.liftReset();
                     }
 
                     runState = State.HALT;
